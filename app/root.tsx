@@ -8,6 +8,7 @@ import {
 } from "remix";
 import type { MetaFunction } from "remix";
 import sharedStyles from "~/styles/shared.css";
+import MainHeader from "./components/navigation/MainHeader";
 
 export const meta: MetaFunction = () => {
   return { title: "New Remix App" };
@@ -26,6 +27,7 @@ export default function App() {
         <Links />
       </head>
       <body>
+        <MainHeader/>
         <Outlet />
         <ScrollRestoration />
         <Scripts />
