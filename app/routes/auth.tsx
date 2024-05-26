@@ -1,8 +1,13 @@
+import authStyles from '~/styles/auth.css'
+import AuthForm from '~/components/auth/AuthForm'; // Import the 'AuthForm' component
 
 const AuthPage = () => {
     return (
-        <h1>Auth Page</h1>
+        <AuthForm />
     );
 }
 
 export default AuthPage;
+export const links = () => {
+    return [{ rel: 'stylesheet', href: authStyles }]
+}
