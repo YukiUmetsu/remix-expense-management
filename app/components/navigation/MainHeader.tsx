@@ -1,6 +1,6 @@
 import Logo from '../util/Logo';
 
-function MainHeader() {
+const MainHeader = () => {
   return (
     <header id="main-header">
       <Logo />

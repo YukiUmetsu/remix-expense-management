@@ -1,4 +1,4 @@
-function PricingPlan({ title, price, perks, icon }) {
+const PricingPlan = ({ title, price, perks, icon }: { title: string, price: string, perks: string[], icon: React.ElementType }) => {
   const Icon = icon;
   return (
     <article>

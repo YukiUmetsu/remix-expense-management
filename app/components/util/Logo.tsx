@@ -1,4 +1,4 @@
-function Logo() {
+const Logo = () => {
   return (
     <h1 id="logo">
       <a href="/">RemixExpenses</a>
