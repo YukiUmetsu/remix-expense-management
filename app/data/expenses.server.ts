@@ -56,3 +56,16 @@ export const updateExpense = async (id: string, expenseData: RawExpense) => {
         throw new Error("Failed to update expense");
     }
 }
+
+
+export const deleteExpense = async (id: string) => {
+    try {
+        await prisma.expense.delete({
+            where: { id: id }
+        });
+    }
+    catch (error) {
+        console.log(error);
+        throw new Error("Failed to delete expense");
+    }
+}   
