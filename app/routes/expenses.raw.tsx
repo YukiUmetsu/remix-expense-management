@@ -1,8 +1,19 @@
+// resource route
+const DUMMY_EXPENSES = [
+    {
+        id: 'e1',
+        title: 'First Expense',
+        amount: 12.88,
+        date: new Date().toISOString(),
+    },
+    {
+        id: 'e2',
+        title: 'First Expense',
+        amount: 12.88,
+        date: new Date().toISOString(),
+    },
+];
 
-const ExpensesRawPage = () => {
-    return (
-        <h1>ExpensesRaw Page</h1>
-    );
+export const loader = () => {
+    return DUMMY_EXPENSES;
 }
-
-export default ExpensesRawPage;
