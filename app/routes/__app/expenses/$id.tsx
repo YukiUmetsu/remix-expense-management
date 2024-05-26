@@ -1,6 +1,9 @@
 import { useNavigate } from "@remix-run/react";
+import { redirect } from "remix";
 import ExpenseForm from "~/components/expenses/ExpenseForm";
 import Modal from "~/components/util/Modal";
+import { updateExpense } from "~/data/expenses.server";
+import { validateExpenseInput } from "~/data/validations.server";
 
 const UpdateExpensesPage = () => {
     const navigate = useNavigate();
@@ -16,3 +19,20 @@ const UpdateExpensesPage = () => {
 }
 
 export default UpdateExpensesPage;
+
+export const action = async ({params, request}) => {
+    const expenseId = params.id;
+    const formData = await request.formData();
+    const expenseData = Object.fromEntries(formData);
+
+
+    try {
+       validateExpenseInput(expenseData);
+    }
+    catch (error) {
+        return error;
+    }
+
+    await updateExpense(expenseId, expenseData);
+    return redirect("/expenses");
+}
