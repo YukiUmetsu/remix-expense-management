@@ -66,3 +66,10 @@ export const destroyUserSession = async (request) => {
         }
     });
 }
+
+export const requireUserSession = async (request) => {
+    const userId = await getUserFromSession(request);
+    if (!userId) {
+        throw redirect('/auth?mode=login');
+    }
+}
