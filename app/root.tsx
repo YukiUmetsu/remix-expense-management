@@ -20,7 +20,7 @@ const Document = ({title, children}: {title?: string, children: JSX.Element}) =>
         <html lang="en">
           <head>
             <meta charSet="utf-8" />
-            {title ? <title>{title}</title>: <></>}
+            {title && <title>{title}</title>}
             <meta name="viewport" content="width=device-width,initial-scale=1" />
             <link rel="preconnect" href="https://fonts.googleapis.com" />
             <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />

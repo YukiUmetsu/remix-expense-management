@@ -43,4 +43,9 @@ const Index = () => {
   );
 }
 export default Index;
-export function meta() {}
+export function meta() {
+  return {
+    title: 'Remix Expenses Management',
+    description: 'manage your expenses in one central place.',
+  }
+}

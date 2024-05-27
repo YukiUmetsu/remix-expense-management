@@ -3,7 +3,7 @@ import { redirect } from "remix";
 import ExpenseForm from "~/components/expenses/ExpenseForm";
 import Modal from "~/components/util/Modal";
 import { deleteExpense, updateExpense } from "~/data/expenses.server";
-import type { RawExpense } from "~/types/expense";
+import type { Expense, RawExpense } from "~/types/expense";
 import { getValidateExpenseFromRequest } from "~/util";
 
 const UpdateExpensesPage = () => {
@@ -36,4 +36,12 @@ export const action = async ({params, request}) => {
     }
     await updateExpense(expenseId, result.data as RawExpense);
     return redirect("/expenses");
+}
+
+export const meta = ({params, location, data, parentData}) => {
+    const expense = parentData['routes/__app/expenses/'].find((expense: Expense) => expense.id === params.id);
+    return {
+        title: expense.title || 'update your expense',
+        description: "Update an expense",
+    };
 }
