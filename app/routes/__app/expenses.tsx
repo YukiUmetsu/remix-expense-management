@@ -5,6 +5,7 @@ import { getExpenses } from "~/data/expenses.server";
 
 const ExpensesLayout = () => {
     const expenses = useLoaderData();
+    const hasExpenses = expenses.length > 0;
 
     return (
         <>
@@ -20,7 +21,14 @@ const ExpensesLayout = () => {
                         <span>Download Raw Data</span>
                     </a>
                 </section>
-                <ExpensesList expenses={expenses} />
+                {hasExpenses && <ExpensesList expenses={expenses} />}
+                {!hasExpenses && 
+                    <>
+                        <section id="no-expenses">
+                            <h1>No expenses found</h1>
+                            <Link to="add"><button>Start adding some</button></Link>
+                        </section>
+                    </>}
             </main>
         </>
     );

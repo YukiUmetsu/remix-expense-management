@@ -3,7 +3,8 @@ import { redirect } from "remix";
 import ExpenseForm from "~/components/expenses/ExpenseForm";
 import Modal from "~/components/util/Modal";
 import { deleteExpense, updateExpense } from "~/data/expenses.server";
-import { validateExpenseInput } from "~/data/validations.server";
+import type { RawExpense } from "~/types/expense";
+import { getValidateExpenseFromRequest } from "~/util";
 
 const UpdateExpensesPage = () => {
     const navigate = useNavigate();
@@ -29,17 +30,10 @@ export const action = async ({params, request}) => {
     }
 
 
-    const formData = await request.formData();
-    const expenseData = Object.fromEntries(formData);
-
-
-    try {
-       validateExpenseInput(expenseData);
+    const result = await getValidateExpenseFromRequest(request);
+    if (result.error) {
+        return result.error;
     }
-    catch (error) {
-        return error;
-    }
-
-    await updateExpense(expenseId, expenseData);
+    await updateExpense(expenseId, result.data as RawExpense);
     return redirect("/expenses");
 }

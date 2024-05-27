@@ -11,3 +11,9 @@ export type RawExpense = {
     amount?: string,
     date?: string
 }
+
+export type ExpenseValidationResult = {
+    valid: boolean,
+    data: RawExpense,
+    error: any,
+}

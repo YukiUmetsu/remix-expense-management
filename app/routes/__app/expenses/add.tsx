@@ -5,6 +5,7 @@ import Modal from "~/components/util/Modal";
 import { addExpense } from "~/data/expenses.server";
 import { validateExpenseInput } from "~/data/validations.server";
 import type { RawExpense } from "~/types/expense";
+import { getValidateExpenseFromRequest } from "~/util";
 
 const ExpensesAddPage = () => {
     const navigate = useNavigate();
@@ -22,16 +23,11 @@ const ExpensesAddPage = () => {
 export default ExpensesAddPage;
 
 export const action = async ({request}: {request: Request}) => {
-    const formData = await request.formData();
-    const expenseData = Object.fromEntries(formData) as RawExpense;
-  
-    try {
-      validateExpenseInput(expenseData);
-    } catch (error) {
-        console.log(`Error: ${error}`);
-        return error;
+    const result = await getValidateExpenseFromRequest(request);
+    if (result.error) {
+        return result.error;
     }
   
-    await addExpense(expenseData);
+    await addExpense(result.data as RawExpense);
     return redirect('/expenses');
 }
