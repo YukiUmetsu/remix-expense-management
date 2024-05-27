@@ -1,4 +1,4 @@
-import type { UserType } from "~/types/user"
+import type { UserInput } from "~/types/user"
 import { prisma } from "./database.server"
 import {compare, hash} from 'bcryptjs';
 import { createCookieSessionStorage, redirect } from "remix";
@@ -25,24 +25,44 @@ const createUserSession = async (userId: string, redirectPath: string) => {
     });
 } 
 
-export const signup = async ({email, password}: UserType) => {
+export const signup = async ({email, password}: UserInput) => {
+    email = String(email).toLowerCase();
     const existingUser = await prisma.user.findFirst({ where: { email } });
     if (existingUser) {
-        throw { email: new Error('Email already exists.'), status: 422 };
+        throw new Error('Email already exists.');
     }
-    const passwordHash = await hash(password, 12);
+    const passwordHash = await hash(String(password), 12);
     const user = await prisma.user.create({ data: { email, password: passwordHash } })
     return createUserSession(user.id, '/expenses');
 }
 
-export const login = async ({email, password}: UserType) => {
+export const login = async ({email, password}: UserInput) => {
+    email = String(email).toLowerCase();
     const user = await prisma.user.findFirst({ where: { email } });
     if (!user) {
-        throw { email: new Error('Invalid email or password.'), status: 401 };
+        throw new Error('Invalid email or password.');
     }
-    const passwordMatch = await compare(password, user.password);
+    const passwordMatch = await compare(String(password), user.password);
     if (!passwordMatch) {
         throw { password: new Error('Invalid email or password.'), status: 422 };
     }
     return createUserSession(user.id, '/expenses');
+}
+
+export const getUserFromSession = async (request) => {
+    const session = await sessionStorage.getSession(request.headers.get('Cookie'));
+    const userId = session.get('userId'); 
+    if (!userId) {
+        return null;
+    }
+    return userId;
+}
+
+export const destroyUserSession = async (request) => {
+    const session = await sessionStorage.getSession(request.headers.get('Cookie'));
+    return redirect('/', {
+        headers: {
+            'Set-Cookie': await sessionStorage.destroySession(session),
+        }
+    });
 }

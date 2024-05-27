@@ -1,5 +1,5 @@
 import type { RawExpense } from "~/types/expense";
-import type { UserType } from "~/types/user";
+import type { UserInput, UserType } from "~/types/user";
 
 const isValidTitle = (value: string) => {
   return value && value.trim().length > 0 && value.trim().length <= 30;
@@ -42,14 +42,14 @@ const isValidPassword =(value: string) => {
   return value && value.trim().length >= 7;
 }
 
-export const validateCredentials = (input: UserType) => {
+export const validateCredentials = (input: UserInput) => {
   let validationErrors = {} as UserType;
 
-  if (!isValidEmail(input.email)) {
+  if (!isValidEmail(String(input?.email))) {
     validationErrors.email = 'Invalid email address.'
   }
 
-  if (!isValidPassword(input.password)) {
+  if (!isValidPassword(String(input?.password))) {
     validationErrors.password = 'Invalid password. Must be at least 7 characters long.'
   }
 

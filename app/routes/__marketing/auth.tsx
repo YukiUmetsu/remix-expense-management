@@ -3,7 +3,7 @@ import AuthForm from '~/components/auth/AuthForm'; // Import the 'AuthForm' comp
 import { getFormDataFromRequest } from '~/util';
 import { redirect } from 'remix';
 import { validateCredentials } from '~/data/validations.server';
-import { UserType } from '~/types/user';
+import type { UserInput } from '~/types/user';
 import { login, signup } from '~/data/auth.server';
 
 const AuthPage = () => {
@@ -22,7 +22,7 @@ export const action = async ({request}: Request) => {
     const authMode = searchParams.get('mode') || 'login';
     const credentials = await getFormDataFromRequest(request);
     try {
-        validateCredentials(credentials as UserType);
+        validateCredentials(credentials as UserInput);
     } catch (error) {
         return new Response(JSON.stringify(error), {
             status: 400,
@@ -34,14 +34,12 @@ export const action = async ({request}: Request) => {
 
     try {
         if (authMode === 'signup') {
-            return await signup(credentials as UserType);
+            return await signup(credentials as UserInput);
        } else {
-            return await login(credentials as UserType);
+            return await login(credentials as UserInput);
        }   
-    } catch (error) {
-        if (error?.status === 422) {
-            return {credentials: error?.message}
-        }
+    } catch (error: Error) {
+        return {credentials: error?.message || ''}
     }
 
     return redirect('/expenses');
