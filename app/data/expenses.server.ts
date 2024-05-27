@@ -5,9 +5,10 @@ export const addExpense = async (expenseData: RawExpense) => {
     try {
         await prisma.expense.create({
             data: {
-                title: expenseData?.title,
+                title: expenseData?.title || '',
                 amount: +(expenseData?.amount || 0),
                 date: new Date(expenseData?.date || '2024-01-01'),
+                User: { connect: { id: expenseData?.userId }},
             }
         });
     }
@@ -17,9 +18,11 @@ export const addExpense = async (expenseData: RawExpense) => {
     }
 }
 
-export const getExpenses = async () => {
+export const getExpenses = async (userId: string) => {
+    if (!userId) throw new Error("Failed to get expenses");
     try {
         return await prisma.expense.findMany({
+            where: { userId: userId},
             orderBy: {
                 date: 'desc'
             }

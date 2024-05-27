@@ -27,6 +27,6 @@ const ExpensesAnalysisPage = () => {
 export default ExpensesAnalysisPage;
 
 export const loader = async ({request}) => {
-    await requireUserSession(request);
-    return await getExpenses();
+    const userId = await requireUserSession(request);
+    return await getExpenses(userId);
  }

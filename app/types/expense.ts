@@ -9,7 +9,8 @@ export type Expense = {
 export type RawExpense = {
     title?: string,
     amount?: string,
-    date?: string
+    date?: string,
+    userId?: string,
 }
 
 export type ExpenseValidationResult = {
